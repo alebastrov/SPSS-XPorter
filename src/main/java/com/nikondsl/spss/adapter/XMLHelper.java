@@ -22,7 +22,7 @@ import java.io.IOException;
 @Slf4j
 class XMLHelper {
 
-    static void parseXML(InputSource inputsource, DefaultHandler defaulthandler) throws IOException, SAXException {
+    static void parseXML(InputSource inputsource, DefaultHandler defaulthandler) {
         try {
             XMLReader xmlreader = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
             setFeatures(xmlreader);
@@ -34,7 +34,6 @@ class XMLHelper {
         } catch (Exception exception) {
             log.error("", exception);
         }
-
     }
 
     private static void setFeatures(XMLReader xmlreader) {
@@ -81,6 +80,4 @@ class XMLHelper {
             log.warn("warning: Parser does not support feature (http://apache.org/xml/features/validation/dynamic)");
         }
     }
-
-
 }

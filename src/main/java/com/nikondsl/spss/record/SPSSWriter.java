@@ -26,45 +26,32 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Igor
- * Memo Relx017 –  SPSS Data File Description
- * Last Modified 25 Nov 09
- */
 @Slf4j
 class SPSSWriter implements ISPSSWriter {
-    private static final String buildNumber = "1.8 build 146";
+    private static final String buildNumber = "1.9 build 147";
     static VariableNameGenerator generator = new VariableNameGenerator();
-    //if ignore, then all limitations will be ignored with automatic truncations
+    //if ignored, then all limitations will be ignored with automatic truncations
     static boolean ignoreLimitations = true;
     final String charset;
-    final Map<HolderKey, Holder> stings = new HashMap<HolderKey, Holder>();
-    final Map<VariableKey, Variable> lastVariablesCached = new HashMap<VariableKey, Variable>();
-    final Map<SPSSUtilHolder<String, Integer>, List<byte[]>> dividedStrings = new HashMap<SPSSUtilHolder<String, Integer>, List<byte[]>>();
+    final Map<HolderKey, Holder> stings = new HashMap<>();
+    final Map<VariableKey, Variable> lastVariablesCached = new HashMap<>();
+    final Map<SPSSUtilHolder<String, Integer>, List<byte[]>> dividedStrings = new HashMap<>();
     private final OutputStream outputStream;
-    //needs to be compiled with JAVA 1.6
-    // detected bugs and issues:
-    //==========================
-    // SUP-6459 - Multiple Response Groups Information fixed for long names
-    //
-    //
+
     private final SPSSBuffer buffer;
-    private final Set<String> uniqueNames = new HashSet<String>(256);
-    private final Set<String> variablesLegacyNames = new HashSet<String>();
+    private final Set<String> uniqueNames = new HashSet<>(256);
+    private final Set<String> variablesLegacyNames = new HashSet<>();
     private final List<String> documentaryInformation = Collections.emptyList();
-    private final Map<String, List<IVariable>> variablesSets = new HashMap<String, List<IVariable>>();
+    private final Map<String, List<IVariable>> variablesSets = new HashMap<>();
     private final long startTime = System.currentTimeMillis();
-    private final AtomicInteger addedCases = new AtomicInteger(0);
-    private final ConcurrentHashMap<Variable, Integer> stringVariablesRecommendedLengths = new ConcurrentHashMap<Variable, Integer>();
-    private final Map<Variable, Integer> stringVariables = new HashMap<Variable, Integer>();
+    private final java.util.concurrent.ConcurrentMap<Variable, Integer> stringVariablesRecommendedLengths = new ConcurrentHashMap<>();
+    private final Map<Variable, Integer> stringVariables = new HashMap<>();
     public boolean highCompatibilityMode;
     int queueSize = 5000;
     int cacheSize = 1000;
     CountDownLatch countDownLatch = new CountDownLatch(1);
-    Map<VariableHolderKey, Variable> additionalVariables = new HashMap<VariableHolderKey, Variable>();
+    Map<VariableHolderKey, Variable> additionalVariables = new HashMap<>();
     private long loggingEveryMilliseconds = 15000L;
     private ArrayBlockingQueue<SPSSCase> queue = null;
     private volatile boolean fileClosed = false;

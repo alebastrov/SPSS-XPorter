@@ -14,8 +14,8 @@ public class ValueLabels implements IValueLabels {
     List<Double> values;
 
     public ValueLabels() {
-        labels = new HashMap<Double, String>();
-        values = new ArrayList<Double>();
+        labels = new HashMap<>();
+        values = new ArrayList<>();
     }
 
     public void putLabel(double d, String s) {
