@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public interface IPMStationSPSSWriter {
+public interface IXmlConverter {
     void setOut(OutputStream out);
 
     void setCharset(String charset);

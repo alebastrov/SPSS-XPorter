@@ -2,7 +2,7 @@ package com.nikondsl.spss.adapter;
 
 import com.nikondsl.spss.IBufferProgressListener;
 import com.nikondsl.spss.IMissingValue;
-import com.nikondsl.spss.IPMStationSPSSWriter;
+import com.nikondsl.spss.IXmlConverter;
 import com.nikondsl.spss.IProgressListener;
 import com.nikondsl.spss.ISPSSWriter;
 import com.nikondsl.spss.IValueLabels;
@@ -37,25 +37,25 @@ import java.util.Map;
  * note: use only in single thread, non-thread safe at all!
  */
 @Slf4j
-public class PMStationSPSSWriter implements IPMStationSPSSWriter {
+public class XmlConverterHelper implements IXmlConverter {
     private final String charset;
     private ISPSSWriter writer;
-    private final List<SPSSCase> cases = new ArrayList<SPSSCase>();
-    private OutputStream ostream = null;
+    private final List<SPSSCase> cases = new ArrayList<>();
+    private OutputStream outputStream = null;
     private List<IVariable> variables = null;
     private SPSSCase currentCase = new SPSSCase();
     private int indexOfVariable = 0;
 
-    private PMStationSPSSWriter() {
+    private XmlConverterHelper() {
         charset = "utf-8";
     }
 
-    public PMStationSPSSWriter(String charset) {
+    public XmlConverterHelper(String charset) {
         this.charset = charset;
     }
 
-    public PMStationSPSSWriter(OutputStream ostream, String encoding) {
-        this.ostream = ostream;
+    public XmlConverterHelper(OutputStream outputStream, String encoding) {
+        this.outputStream = outputStream;
         this.charset = encoding;
     }
 
@@ -68,24 +68,24 @@ public class PMStationSPSSWriter implements IPMStationSPSSWriter {
     }
 
     public void addDictionarySection() throws IOException {
-        writer = SPSSFacade.createWriter(charset, "PMStationAdapter", ostream);
+        writer = SPSSFacade.createWriter(charset, "PMStationAdapter", outputStream);
         writer.setLineByLineMode(true);
     }
 
     public void addDictionarySection(int numberOfCases) throws IOException {
-        writer = SPSSFacade.createWriter(charset, "PMStationAdapter", ostream);
+        writer = SPSSFacade.createWriter(charset, "PMStationAdapter", outputStream);
         writer.setLineByLineMode(true);
         writer.setNumberOfCases(numberOfCases);
     }
 
     public void addDictionarySection(String header, String fileLabel) throws IOException {
-        writer = SPSSFacade.createWriter(charset, "PMStationAdapter" + header, ostream);
+        writer = SPSSFacade.createWriter(charset, "PMStationAdapter" + header, outputStream);
         writer.setLineByLineMode(true);
         writer.setFileLabel(fileLabel);
     }
 
     public void addDictionarySection(String header, int numberOfVars, int numberOfCases, String fileLabel, boolean storeFormat) throws IOException {
-        writer = SPSSFacade.createWriter(charset, "PMStationAdapter" + header, ostream);
+        writer = SPSSFacade.createWriter(charset, "PMStationAdapter" + header, outputStream);
         writer.setLineByLineMode(true);
         writer.setFileLabel(fileLabel);
         writer.setNumberOfCases(numberOfCases);
@@ -107,7 +107,7 @@ public class PMStationSPSSWriter implements IPMStationSPSSWriter {
                                      String fileLabel,
                                      Date date,
                                      boolean storeFormat) throws IOException {
-        writer = SPSSFacade.createWriter(charset, "PMStationAdapter" + header, ostream);
+        writer = SPSSFacade.createWriter(charset, "PMStationAdapter" + header, outputStream);
         writer.setLineByLineMode(true);
         writer.setFileLabel(fileLabel);
         writer.setNumberOfCases(numberOfCases);

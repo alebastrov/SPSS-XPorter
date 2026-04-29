@@ -23,7 +23,7 @@ import java.util.List;
 
 @lombok.extern.slf4j.Slf4j
 public class XmlConverter extends DefaultHandler {
-    private final PMStationSPSSWriter writer;
+    private final XmlConverterHelper writer;
     private StringBuilder stringBuilder = null;
     private final List<IndicatorType> typesOfVariables = new ArrayList<>();
     private int variableIndex = 0;
@@ -34,23 +34,23 @@ public class XmlConverter extends DefaultHandler {
     private ValueLabels valueLabels;
     private int variableIndexForLabel = -1;
 
-    private XmlConverter(PMStationSPSSWriter spsswriter) {
+    private XmlConverter(XmlConverterHelper spsswriter) {
         writer = spsswriter;
     }
 
     public static void convert(InputStream inputstream, OutputStream outputstream, String charset) throws IOException, SAXException {
-        PMStationSPSSWriter spsswriter = new PMStationSPSSWriter(outputstream, charset);
+        XmlConverterHelper spsswriter = new XmlConverterHelper(outputstream, charset);
         convert(inputstream, spsswriter);
     }
 
     public static void convert(File file, File file1, String charset) throws IOException, SAXException {
-        PMStationSPSSWriter spsswriter = new PMStationSPSSWriter(new BufferedOutputStream(new FileOutputStream(file1)), charset);
+        XmlConverterHelper spsswriter = new XmlConverterHelper(new BufferedOutputStream(new FileOutputStream(file1)), charset);
         FileInputStream fileinputstream = new FileInputStream(file);
         convert(fileinputstream, spsswriter);
         fileinputstream.close();
     }
 
-    public static void convert(InputStream inputstream, PMStationSPSSWriter spsswriter) throws IOException, SAXException {
+    public static void convert(InputStream inputstream, XmlConverterHelper spsswriter) throws IOException, SAXException {
         XmlConverter xmlConverter = new XmlConverter(spsswriter);
         spsswriter.addDictionarySection();
         XMLHelper.parseXML(new InputSource(inputstream), xmlConverter);
